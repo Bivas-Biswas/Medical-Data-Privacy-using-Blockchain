@@ -1,0 +1,39 @@
+/* width */
+.scrollbar ::-webkit-scrollbar {
+    width: 6px;
+    height: 7px;
+    cursor: pointer;
+    background: #52525b;
+}
+
+/* Track */
+.scrollbar ::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Handle */
+.scrollbar ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.scrollbar ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0);
+}
+
+.clearfix::after {
+    content: '';
+    clear: both;
+    display: table;
+}
+
+#nprogress .spinner {
+    display: none !important;
+}
+
+.cursors-layer > .monaco-mouse-cursor-text {
+    position: absolute;
+    background-color: #fff;
+}
