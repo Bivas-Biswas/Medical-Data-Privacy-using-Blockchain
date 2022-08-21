@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ConnectWalletButton from "../components/ConnectWallet";
+import ConnectWalletButton from "../components/Misc/ConnectWallet";
 import { useLoginContext } from "../context";
 import { useRouter } from "next/router";
-import Button from "../components/Button";
-import Link from "../components/Link";
+import Button from "../components/Misc/Button";
+import Link from "../components/Misc/Link";
 import toast from "react-hot-toast";
 
 function Login() {
@@ -47,8 +47,8 @@ function Login() {
   };
 
   return (
-    <div className="bg-[#97b5fe] flex flex-col justify-center py-6 items-center gap-10">
-      <p className="text-center text-3xl font-medium underline">login as a {user.type}</p>
+    <div className="flex flex-col justify-center py-6 items-center gap-10">
+      <p className="text-center text-3xl font-medium underline">Select logging method as a {user.type}</p>
       {correctNetwork && <WrongNetworkMessage />}
       {!correctNetwork && !isUserLoggedIn && (
         <ConnectWalletButton connectWallet={connectWallet} />

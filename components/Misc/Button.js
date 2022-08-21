@@ -18,7 +18,7 @@ function Button({
       disabled={disabled}
       className={cx(
         ButtonStyle[type],
-        "flex flex-row items-center justify-center rounded px-2 py-1.5 transition-all duration-150 ease-in-out hover:scale-[1.04]",
+        "flex flex-row text-gray-100 items-center justify-center rounded px-2 py-1.5 transition-all duration-150 ease-in-out hover:scale-[1.02]",
         className
       )}
       onClick={() => {

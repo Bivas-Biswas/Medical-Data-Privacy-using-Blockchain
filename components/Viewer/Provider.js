@@ -1,18 +1,22 @@
 import React, { useState } from "react";
-import { useLoginContext } from "../context";
+import { useLoginContext } from "../../context";
 import { ethers } from "ethers";
-import { ProviderContractAddress } from "../config";
-import ProviderAbi from "../backend/build/contracts/Provider.json";
-import Input from "./Input";
-import Button from "./Button";
+import { ProviderContractAddress } from "../../config";
+import ProviderAbi from "../../backend/build/contracts/Provider.json";
+import Input from "../Inputs/Input";
+import Button from "../Misc/Button";
 import toast from "react-hot-toast";
-import CsvView from "./CsvView";
-import { b64_to_json } from "../utils";
+import CsvView from "../Misc/CsvView";
+import { b64_to_json } from "../../utils";
 import cx from "classnames";
-import Loading from "./Loading";
-import AnimatedModal from "./AnimateModal";
+import Loading from "../Layout/Loading";
+import AnimatedModal from "../Misc/AnimateModal";
 import { saveAs } from "file-saver";
-import { Component1Icon } from "@radix-ui/react-icons";
+import {
+  CheckCircledIcon,
+  Component1Icon,
+  CrossCircledIcon,
+} from "@radix-ui/react-icons";
 
 const connectWithContact = () => {
   const { ethereum } = window;
@@ -114,25 +118,26 @@ function Provider() {
 
   return (
     <div>
-      <p>
+      <p className="text-center my-4 text-xl">
         Hello Welcome back <br /> <b>{user.address}</b>
       </p>
       <div className="flex flex-col gap-3">
         {report && (
-          <CsvView csvInText={b64_to_json(report)} className="bg-gray-100" />
+          <CsvView csvInText={b64_to_json(report)} className="bg-blue-200" />
         )}
         <div className="flex flex-col gap-2">
           <Input
             id={"verify-report"}
             label={"Verify Report:"}
-            labelClassName={"text-black"}
+            labelClassName={"text-black text-xl"}
+            className="bg-gray-600"
             value={reportId || ""}
             textSize={"large"}
             placeholder={"add provider..."}
             onChangeValue={(_value) => setReportId(_value)}
           />
           <Button
-            className="w-min"
+            className="w-min px-8"
             onClick={async () => {
               const detail = await handleVerifyReport(reportId);
               setReport(detail);
@@ -147,13 +152,13 @@ function Provider() {
         <div className="flex flex-col gap-2">
           <Button
             type={"secondary"}
-            className="w-max"
+            className="text-xl w-max"
             onClick={async () => {
               const reports = await getAllReports();
               setAllReports(reports);
             }}
           >
-            Fetch All Your Reports
+            Fetch All Reports
           </Button>
 
           <AnimatedModal
@@ -164,14 +169,18 @@ function Provider() {
               setSelectReport(null);
             }}
           >
-            <div className="w-[70vw] p-8 flex flex-col justify-center">
+            <div className="max-w-[70vw] p-8 flex flex-col justify-center">
               {selectReport ? (
                 <div className="flex flex-col gap-4">
+                  <div className="flex flex-row gap-4 items-center">
+                    <p className="text-lg font-semibold">Address:</p>
+                    <p>{selectReport.address}</p>
+                  </div>
                   <CsvView
                     csvInText={b64_to_json(selectReport.reportTxt)}
                     className=""
                   />
-                  <Button className="w-min" onClick={handleDownloadFile}>
+                  <Button className="text-xl mt-4" onClick={handleDownloadFile}>
                     Download
                   </Button>
                 </div>
@@ -181,35 +190,35 @@ function Provider() {
             </div>
           </AnimatedModal>
 
-          <div className="overflow-auto">
+          <div className="overflow-x-auto">
             <table
               className={
-                "divide-y divide-gray-500 rounded flex flex-col max-h-[60vh] items-stretch w-full"
+                "divide-y divide-gray-500 rounded flex flex-col max-h-[60vh] min-w-full w-max items-stretch"
               }
             >
               <thead className={"rounded-t-xl"}>
-                <tr className="flex justify-between border border-blue-900">
+                <tr className="flex w-full border border-blue-900">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 w-1/12 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Id
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 w-7/12 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Report Address
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 w-2/12 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Permission
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 w-2/12 py-3 col-start-10 col-end-12 col-span-4 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Details
                   </th>
@@ -220,31 +229,35 @@ function Provider() {
                   return (
                     <tr
                       key={idx}
-                      className="flex justify-between bg-elevation-4 rounded-b-xl"
+                      className="flex w-full rounded-b-xl"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
-                          <div className="text-lg text-content-medium font-semibold">
+                      <td className="w-1/12 py-4 whitespace-nowrap">
+                        <div className="flex justify-center items-center align-middle w-full">
+                          <div className="text-lg text-center font-semibold">
                             {idx}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
+                      <td className="w-7/12 py-4 whitespace-nowrap">
+                        <div className="flex justify-center items-center align-middle w-fulls">
                           <div className="text-lg text-content-medium font-semibold">
                             {report[0]}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
+                      <td className="py-4 w-2/12 whitespace-nowrap">
+                        <div className="flex justify-center items-center w-full">
                           <div className="text-lg text-content-medium font-semibold">
-                            {report[1] ? "True" : "False"}
+                            {report[1] ? (
+                              <CheckCircledIcon className="w-8 h-8 text-green-500" />
+                            ) : (
+                              <CrossCircledIcon className="w-8 h-8 text-red-500" />
+                            )}
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
+                      <td className="w-2/12 px-6 py-4 whitespace-nowrap">
+                        <div className="flex justify-center items-center align-middle w-full">
                           <div className="text-lg text-content-medium font-semibold">
                             <Button
                               className={"bg-gray-500"}

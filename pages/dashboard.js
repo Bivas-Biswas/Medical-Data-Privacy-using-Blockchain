@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import User from "../components/User";
+import User from "../components/Viewer/User";
 import { useRouter } from "next/router";
 import { useLoginContext } from "../context";
-import Provider from "../components/Provider";
+import Provider from "../components/Viewer/Provider";
 
 const Dashboard = () => {
   const { isUserLoggedIn, user } = useLoginContext();

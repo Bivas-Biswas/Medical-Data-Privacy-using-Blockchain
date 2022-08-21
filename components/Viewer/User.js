@@ -1,17 +1,27 @@
 import React, { useState } from "react";
-import { useLoginContext } from "../context";
-import Button from "./Button";
+import { useLoginContext } from "../../context";
+import Button from "../Misc/Button";
 import { ethers } from "ethers";
-import { UserContractAddress } from "../config";
-import UserAbi from "../backend/build/contracts/User.json";
-import { b64_to_json, formatBytes, json_to_b64, textTruncate } from "../utils";
-import AnimatedModal from "./AnimateModal";
-import Loading from "./Loading";
+import { UserContractAddress } from "../../config";
+import UserAbi from "../../backend/build/contracts/User.json";
+import {
+  b64_to_json,
+  formatBytes,
+  json_to_b64,
+  textTruncate,
+} from "../../utils";
+import AnimatedModal from "../Misc/AnimateModal";
+import Loading from "../Layout/Loading";
 import cx from "classnames";
-import CsvView from "./CsvView";
+import CsvView from "../Misc/CsvView";
 import { useDropzone } from "react-dropzone";
-import { FileTextIcon } from "@radix-ui/react-icons";
-import Input from "./Input";
+import {
+  CheckCircledIcon,
+  Component1Icon,
+  CrossCircledIcon,
+  FileTextIcon,
+} from "@radix-ui/react-icons";
+import Input from "../Inputs/Input";
 import toast from "react-hot-toast";
 
 const connectWithContact = () => {
@@ -54,7 +64,7 @@ const getAllDetails = async () => {
       return reports;
     }
   } catch (error) {
-    toast.error("Something went wrong!");
+    toast.error("You have no reports!");
   }
 };
 
@@ -108,9 +118,14 @@ const revokeProvider = async (id, account) => {
   }
 };
 
+const sampleCSV = `first_name,last_name,email,gender,age,zip,registered
+Constantin,Langsdon,clangsdon0@hc360.com,Male,96,123,true
+Norah,Raison,nraison1@wired.com,Female,32,false
+`;
+
 const User = () => {
   const fileReader = new FileReader();
-  const { user } = useLoginContext();
+  const { user, isUserLoggedIn } = useLoginContext();
   const [report, setReport] = useState(null);
   const [addProvider, setAddProvider] = useState(null);
   const [removeProvider, setRemoveProvider] = useState(null);
@@ -157,17 +172,29 @@ const User = () => {
     }
   };
 
+  const handleDownloadSampleFile = () => {
+    const blob = new Blob([sampleCSV], {
+      type: "text/csv",
+    });
+    saveAs(blob, `sample.csv`);
+  };
+
   return (
-    <div className={""}>
-      <p>Hello</p>
-      <h1>Welcome back</h1>
-      <p>{user.address}</p>
-      {report && <CsvView csvInText={report} />}
+    <div className={"flex flex-col gap-4"}>
+      <p className="text-center my-4 text-xl">
+        Hello Welcome back <br /> <b>{user.address}</b>
+      </p>
+      {isUserLoggedIn && user.type === "user" && (
+        <Button className="w-max" onClick={handleDownloadSampleFile}>
+          Download Sample Csv
+        </Button>
+      )}
+      {report && <CsvView csvInText={report} className="bg-blue-200" />}
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex flex-col gap-4 w-full items-center">
           <div
             className={cx(
-              `rounded h-[7rem] justify-center py-4 flex flex-col items-center max-w-[20rem] bg-blue-100 border-dashed border-2 border-gray-300 cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-tranfrom duration-150 ease-in-out`,
+              `w-full rounded h-[7rem] justify-center py-4 flex flex-col items-center bg-blue-100 border-dashed border-2 border-gray-300 cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-tranfrom duration-150 ease-in-out`,
               {
                 "border-red-300 bg-red-50": isDragReject,
                 "border-green-300 bg-green-50": isDragAccept,
@@ -202,7 +229,7 @@ const User = () => {
           </div>
           <Button
             onClick={() => addReport(json_to_b64(report))}
-            className="bg-yellow-500 p-4 w-min"
+            className="bg-yellow-500 px-10 text-xl w-min"
           >
             Save
           </Button>
@@ -210,12 +237,13 @@ const User = () => {
         <div className={"flex flex-col gap-4 w-full"}>
           <div>
             <Button
+              className="text-xl w-max"
               onClick={async () => {
                 const reports = await getAllDetails();
                 setAllReport(reports);
               }}
             >
-              Fetch All Your Reports
+              Fetch All Reports
             </Button>
           </div>
           <div className="overflow-auto">
@@ -247,40 +275,58 @@ const User = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-700 overflow-auto flex-1 rounded-b-xl">
-                {allReport.map((report, idx) => {
-                  return (
-                    <tr
-                      key={idx}
-                      className="flex justify-between bg-elevation-4 rounded-b-xl"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
-                          <div className="text-lg text-content-medium font-semibold">
-                            {idx}
+                {allReport &&
+                  allReport.map((report, idx) => {
+                    return (
+                      <tr
+                        key={idx}
+                        className="flex justify-between bg-elevation-4 rounded-b-xl"
+                      >
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex justify-center items-center align-middle w-full pl-6">
+                            <div className="text-lg text-content-medium font-semibold">
+                              {idx}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
-                          <div className="text-lg text-content-medium font-semibold">
-                            {report[1]}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex justify-center items-center align-middle w-full pl-6">
+                            <div className="text-lg text-content-medium font-semibold">
+                              {report[1]}
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex justify-center items-center align-middle w-full pl-6">
-                          <div className="text-lg text-content-medium font-semibold">
-                            <Button onClick={() => showReportDetails(idx)}>
-                              Opts
-                            </Button>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex justify-center items-center align-middle w-full pl-6">
+                            <div className="text-lg text-content-medium font-semibold">
+                              <Button
+                                className={
+                                  "bg-gray-500 hover:bg-green-500 hover:scale-100"
+                                }
+                                onClick={() => showReportDetails(idx)}
+                              >
+                                <Component1Icon />
+                              </Button>
+                            </div>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                        </td>
+                      </tr>
+                    );
+                  })}
               </tbody>
             </table>
+            {allReport && allReport.length === 0 && (
+              <p className="text-xl my-5 text-center text-red-500">
+                {" "}
+                Fetch All Reports
+              </p>
+            )}
+            {!allReport && (
+              <p className="text-xl my-5 text-center text-red-500">
+                {" "}
+                You have no Reports!
+              </p>
+            )}
           </div>
           <AnimatedModal
             isOpen={isReportModalOpen}
@@ -293,16 +339,16 @@ const User = () => {
             <div className="w-[70vw] p-8 flex flex-col justify-center">
               {selectReport ? (
                 <div className="w-full h-full flex flex-col gap-2">
-                  <div className="flex flex-row gap-4">
-                    <p>Id: </p>
+                  <div className="flex flex-row gap-4 items-center">
+                    <p className="text-lg font-semibold">Id: </p>
                     <p>{selectReport.id}</p>
                   </div>
-                  <div className="flex flex-row gap-4">
-                    <p>Address: </p>
+                  <div className="flex flex-row gap-4  items-center">
+                    <p className="text-lg font-semibold">Address: </p>
                     <p>{selectReport.address}</p>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <p>Providers: </p>
+                  <div className="flex flex-col gap-2">
+                    <p className="text-lg font-semibold">Providers: </p>
                     <table
                       className={
                         "divide-y divide-gray-500 rounded flex flex-col max-h-[30vh] items-stretch bg-gray-700"
@@ -352,9 +398,13 @@ const User = () => {
                                 </div>
                               </td>
                               <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex justify-center items-center align-middle w-full pl-6">
+                                <div className="flex justify-center items-center align-middle w-full">
                                   <div className="text-lg text-content-medium font-semibold">
-                                    {pro[1] ? "True" : "False"}
+                                    {pro[1] ? (
+                                      <CheckCircledIcon className="w-8 h-8 text-green-500" />
+                                    ) : (
+                                      <CrossCircledIcon className="w-8 h-8 text-red-500" />
+                                    )}
                                   </div>
                                 </div>
                               </td>
@@ -364,11 +414,13 @@ const User = () => {
                       </tbody>
                     </table>
                   </div>
-                  <div className="flex flex-col gap-4">
-                    <p>Details: </p>
-                    <CsvView csvInText={b64_to_json(selectReport.details)} />
+                  <div className="flex flex-col gap-4 w-full">
+                    <p className="text-lg font-semibold">Details: </p>
+                    <div className="w-full">
+                      <CsvView csvInText={b64_to_json(selectReport.details)} />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 mt-4">
                     <Input
                       id={"add-provider"}
                       label={"Add Provider:"}
@@ -390,7 +442,7 @@ const User = () => {
                       </Button>
                     </div>
                   </div>
-                  <div className="flex flex-col gap-4">
+                  <div className="flex flex-col gap-4 mt-4">
                     <Input
                       id={"remove-provider"}
                       label={"Remove Provider:"}
@@ -410,18 +462,22 @@ const User = () => {
                       >
                         Remove
                       </Button>
-                      <Button
-                        className={"w-min px-6"}
-                        type={"secondary"}
-                        onClick={async () => {
-                          const reports = await getAllDetails();
-                          setAllReport(reports);
-                          await showReportDetails(selectReport.id);
-                        }}
-                      >
-                        Refresh
-                      </Button>
                     </div>
+                  </div>
+                  <div className="flex flex-row w-full mt-7">
+                    <Button
+                      className={
+                        "w-full px-3 py-2 text-xl font-semibold bg-blue-800"
+                      }
+                      type={"secondary"}
+                      onClick={async () => {
+                        const reports = await getAllDetails();
+                        setAllReport(reports);
+                        await showReportDetails(selectReport.id);
+                      }}
+                    >
+                      Refresh
+                    </Button>
                   </div>
                 </div>
               ) : (
