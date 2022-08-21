@@ -1,10 +1,18 @@
 import { useRouter } from "next/router";
 import { useLoginContext } from "../context";
 import Button from "../components/Misc/Button";
+import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
   const { user, setUser } = useLoginContext();
+
+  useEffect(() => {
+    if (user.address && user.type) {
+      router.push("/dashboard");
+    }
+  }, []);
+
   return (
     <div className="flex flex-col mt-32 items-center gap-10">
       <p className="text-3xl font-semibold">Login as a</p>

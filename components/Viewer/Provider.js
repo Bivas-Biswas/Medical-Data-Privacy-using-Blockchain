@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLoginContext } from "../../context";
 import { ethers } from "ethers";
 import { ProviderContractAddress } from "../../config";
@@ -7,7 +7,7 @@ import Input from "../Inputs/Input";
 import Button from "../Misc/Button";
 import toast from "react-hot-toast";
 import CsvView from "../Misc/CsvView";
-import { b64_to_json } from "../../utils";
+import { b64_to_json, copyToClip } from "../../utils";
 import cx from "classnames";
 import Loading from "../Layout/Loading";
 import AnimatedModal from "../Misc/AnimateModal";
@@ -41,12 +41,18 @@ const handleVerifyReport = async (reportId) => {
     if (!contract) {
       console.log("Ethereum object doesn't exist");
     } else {
-      const haveAccess = await contract._getDetails(reportId);
-      if (haveAccess) {
-        return haveAccess;
-      } else {
-        toast.error('You don"t have premission to see this ');
-        return null;
+      try {
+        await contract._verifyDetail(reportId);
+        const haveAccess = await contract._getDetails(reportId);
+        console.log(haveAccess);
+        if (haveAccess) {
+          return haveAccess;
+        } else {
+          toast.error('You don"t have premission to see this');
+          return null;
+        }
+      } catch (e) {
+        toast.error("Something went wrong!");
       }
     }
   } catch (error) {
@@ -76,6 +82,24 @@ const showReportDetails = async (_reportId) => {
     } else {
       const report = await contract._getDetails(_reportId);
       return report;
+    }
+  } catch (error) {
+    toast.error("Something went wrong!");
+  }
+};
+
+const removeReportDetails = async (_reportId) => {
+  try {
+    const contract = connectWithContact();
+    if (!contract) {
+      console.log("Ethereum object doesn't exist");
+    } else {
+      try {
+        await contract._removeReport(_reportId);
+        toast.success("successfull deleted.");
+      } catch (e) {
+        toast.error("not authorized / report does not exist!");
+      }
     }
   } catch (error) {
     toast.error("Something went wrong!");
@@ -116,6 +140,12 @@ function Provider() {
     }
   };
 
+  const handleRemoveAccessReport = async () => {
+    console.log(selectReport.address);
+    await removeReportDetails(selectReport.address);
+    setIsReportModalOpen(false);
+  };
+
   return (
     <div>
       <p className="text-center my-4 text-xl">
@@ -123,7 +153,7 @@ function Provider() {
       </p>
       <div className="flex flex-col gap-3">
         {report && (
-          <CsvView csvInText={b64_to_json(report)} className="bg-blue-200" />
+          <CsvView csvInText={b64_to_json(report)} className="!bg-blue-200" />
         )}
         <div className="flex flex-col gap-2">
           <Input
@@ -176,13 +206,22 @@ function Provider() {
                     <p className="text-lg font-semibold">Address:</p>
                     <p>{selectReport.address}</p>
                   </div>
-                  <CsvView
-                    csvInText={b64_to_json(selectReport.reportTxt)}
-                    className=""
-                  />
-                  <Button className="text-xl mt-4" onClick={handleDownloadFile}>
-                    Download
-                  </Button>
+                  <CsvView csvInText={b64_to_json(selectReport.reportTxt)} />
+                  <div className="flex flex-row gap-4">
+                    <Button
+                      className="text-xl mt-4"
+                      type={"secondary"}
+                      onClick={handleRemoveAccessReport}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      className="text-xl mt-4"
+                      onClick={handleDownloadFile}
+                    >
+                      Download
+                    </Button>
+                  </div>
                 </div>
               ) : (
                 <Loading centerParent />
@@ -227,10 +266,7 @@ function Provider() {
               <tbody className="divide-y divide-gray-700 overflow-auto flex-1 rounded-b-xl">
                 {allReports.map((report, idx) => {
                   return (
-                    <tr
-                      key={idx}
-                      className="flex w-full rounded-b-xl"
-                    >
+                    <tr key={idx} className="flex w-full rounded-b-xl">
                       <td className="w-1/12 py-4 whitespace-nowrap">
                         <div className="flex justify-center items-center align-middle w-full">
                           <div className="text-lg text-center font-semibold">
@@ -240,7 +276,10 @@ function Provider() {
                       </td>
                       <td className="w-7/12 py-4 whitespace-nowrap">
                         <div className="flex justify-center items-center align-middle w-fulls">
-                          <div className="text-lg text-content-medium font-semibold">
+                          <div
+                            className="text-lg text-content-medium font-semibold"
+                            onClick={() => copyToClip(report[1])}
+                          >
                             {report[0]}
                           </div>
                         </div>

@@ -2,7 +2,6 @@ import React from "react";
 import Button from "../Misc/Button";
 import { useLoginContext } from "../../context";
 import { initialUser } from "../../context/provider/Login";
-import { useRouter } from "next/router";
 import Link from "../Misc/Link";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import Image from "next/image";
@@ -10,13 +9,12 @@ import Image from "next/image";
 function Navbar() {
   const { isUserLoggedIn, setIsUserLoggedIn, setUser, user } =
     useLoginContext();
-  const router = useRouter();
 
   return (
     <nav className="sticky top-0 bg-blue-200 py-4 px-2 shadow-lg mb-10">
       <div className="flex flex-row items-center justify-between w-full max-w-6xl mx-auto">
         <Link
-          href={"/"}
+          href={user.address && user.type ? "/dashboard" : "/"}
           className="flex flex-row gap-2 items-center justify-between"
         >
           <Image src="/favicon.jpg" alt="logo" width={40} height={40} />
@@ -24,15 +22,15 @@ function Navbar() {
         </Link>
         <div className="flex flex-row gap-4 items-center justify-between">
           {isUserLoggedIn && (
-            <div
+            <Link
+              href={"/"}
               onClick={() => {
                 setIsUserLoggedIn(false);
                 setUser(initialUser);
-                router.push("/");
               }}
             >
               <Button>Logout</Button>
-            </div>
+            </Link>
           )}
           <a
             href="https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain"
