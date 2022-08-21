@@ -34,12 +34,10 @@ const connectWithContact = () => {
 const handleVerifyReport = async (reportId) => {
   try {
     const contract = connectWithContact();
-    console.log(contract);
     if (!contract) {
       console.log("Ethereum object doesn't exist");
     } else {
       const haveAccess = await contract._getDetails(reportId);
-      console.log("haveAccess", haveAccess);
       if (haveAccess) {
         return haveAccess;
       } else {
@@ -55,12 +53,10 @@ const handleVerifyReport = async (reportId) => {
 const getAllReports = async () => {
   try {
     const contract = connectWithContact();
-    console.log(contract);
     if (!contract) {
       console.log("Ethereum object doesn't exist");
     } else {
       const allReport = await contract._allhaveAccess();
-      console.log("haveAccess", allReport);
       return allReport;
     }
   } catch (error) {
@@ -71,12 +67,10 @@ const getAllReports = async () => {
 const showReportDetails = async (_reportId) => {
   try {
     const contract = connectWithContact();
-    console.log(contract);
     if (!contract) {
       console.log("Ethereum object doesn't exist");
     } else {
       const report = await contract._getDetails(_reportId);
-      console.log("report", report);
       return report;
     }
   } catch (error) {
