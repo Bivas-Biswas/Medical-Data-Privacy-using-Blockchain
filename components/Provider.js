@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useLoginContext } from "../context";
 import { ethers } from "ethers";
 import { ProviderContractAddress } from "../config";
-import ProviderAbi from "../../backend/build/contracts/Provider.json";
+import ProviderAbi from "../backend/build/contracts/Provider.json";
 import Input from "./Input";
 import Button from "./Button";
 import toast from "react-hot-toast";

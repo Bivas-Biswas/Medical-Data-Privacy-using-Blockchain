@@ -3,7 +3,7 @@ import { useLoginContext } from "../context";
 import Button from "./Button";
 import { ethers } from "ethers";
 import { UserContractAddress } from "../config";
-import UserAbi from "../../backend/build/contracts/User.json";
+import UserAbi from "../backend/build/contracts/User.json";
 import { b64_to_json, formatBytes, json_to_b64, textTruncate } from "../utils";
 import AnimatedModal from "./AnimateModal";
 import Loading from "./Loading";
