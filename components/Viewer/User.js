@@ -6,6 +6,7 @@ import { UserContractAddress } from "../../config";
 import UserAbi from "../../backend/build/contracts/User.json";
 import {
   b64_to_json,
+  copyToClip,
   formatBytes,
   json_to_b64,
   textTruncate,
@@ -133,7 +134,7 @@ const User = () => {
   const [allReport, setAllReport] = useState([]);
   const [selectReport, setSelectReport] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const { getRootProps, getInputProps, open, isDragAccept, isDragReject } =
+  const { getRootProps, getInputProps, isDragAccept, isDragReject } =
     useDropzone({
       maxFiles: 1,
       // noClick: true,
@@ -159,7 +160,6 @@ const User = () => {
     try {
       setIsReportModalOpen(true);
       const providers = await getAllProvider(id);
-      console.log(providers);
       const report = allReport[id];
       setSelectReport({
         id,
@@ -189,7 +189,7 @@ const User = () => {
           Download Sample Csv
         </Button>
       )}
-      {report && <CsvView csvInText={report} className="bg-blue-200" />}
+      {report && <CsvView csvInText={report} className="!bg-blue-200" />}
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4 w-full items-center">
           <div
@@ -228,7 +228,14 @@ const User = () => {
             </div>
           </div>
           <Button
-            onClick={() => addReport(json_to_b64(report))}
+            onClick={async () => {
+              if (!report || !file) {
+                return toast.error("No reported add!");
+              }
+              await addReport(json_to_b64(report));
+              setReport(null);
+              setFile(null);
+            }}
             className="bg-yellow-500 px-10 text-xl w-min"
           >
             Save
@@ -256,19 +263,19 @@ const User = () => {
                 <tr className="flex justify-between border border-blue-900">
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Id
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Report Address
                   </th>
                   <th
                     scope="col"
-                    className="px-6 py-3 text-left text-lg uppercase tracking-wider font-bold"
+                    className="px-6 py-3 text-center text-lg uppercase tracking-wider font-bold"
                   >
                     Details
                   </th>
@@ -291,7 +298,10 @@ const User = () => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="flex justify-center items-center align-middle w-full pl-6">
-                            <div className="text-lg text-content-medium font-semibold">
+                            <div
+                              className="text-lg text-content-medium font-semibold"
+                              onClick={() => copyToClip(report[1])}
+                            >
                               {report[1]}
                             </div>
                           </div>
@@ -349,70 +359,79 @@ const User = () => {
                   </div>
                   <div className="flex flex-col gap-2">
                     <p className="text-lg font-semibold">Providers: </p>
-                    <table
-                      className={
-                        "divide-y divide-gray-500 rounded flex flex-col max-h-[30vh] items-stretch bg-gray-700"
-                      }
-                    >
-                      <thead className={"rounded-t-xl"}>
-                        <tr className="flex justify-between border border-blue-900">
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left uppercase tracking-wider font-bold"
-                          >
-                            SL.
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left uppercase tracking-wider font-bold"
-                          >
-                            Provider Address
-                          </th>
-                          <th
-                            scope="col"
-                            className="px-6 py-3 text-left uppercase tracking-wider font-bold"
-                          >
-                            Permission
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-700 overflow-auto flex-1 rounded-b-xl">
-                        {selectReport.providers.map((pro, idx) => {
-                          return (
-                            <tr
-                              key={idx}
-                              className="flex justify-between bg-elevation-4 rounded-b-xl"
-                            >
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex justify-center items-center align-middle w-full pl-6">
-                                  <div className="text-lg text-content-medium font-semibold">
-                                    {idx}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex justify-center items-center align-middle w-full pl-6">
-                                  <div className="text-lg text-content-medium font-semibold">
-                                    {pro[0]}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex justify-center items-center align-middle w-full">
-                                  <div className="text-lg text-content-medium font-semibold">
-                                    {pro[1] ? (
-                                      <CheckCircledIcon className="w-8 h-8 text-green-500" />
-                                    ) : (
-                                      <CrossCircledIcon className="w-8 h-8 text-red-500" />
-                                    )}
-                                  </div>
-                                </div>
-                              </td>
+                    {selectReport.providers.length === 0 ? (
+                      <p className="text-red-500">*No providers added</p>
+                    ) : (
+                      <div className="overflow-x-auto">
+                        <table
+                          className={
+                            "divide-y divide-gray-500 min-w-max w-full rounded flex flex-col max-h-[30vh] items-stretch bg-gray-700"
+                          }
+                        >
+                          <thead className={"rounded-t-xl"}>
+                            <tr className="flex justify-between border border-blue-900">
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-center uppercase tracking-wider font-bold"
+                              >
+                                SL.
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-center uppercase tracking-wider font-bold"
+                              >
+                                Provider Address
+                              </th>
+                              <th
+                                scope="col"
+                                className="px-6 py-3 text-center uppercase tracking-wider font-bold"
+                              >
+                                Permission
+                              </th>
                             </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
+                          </thead>
+                          <tbody className="divide-y divide-gray-700 flex-1 rounded-b-xl">
+                            {selectReport.providers.map((pro, idx) => {
+                              return (
+                                <tr
+                                  key={idx}
+                                  className="flex justify-between rounded-b-xl"
+                                >
+                                  <td className="px-6 py-3 whitespace-nowrap">
+                                    <div className="">
+                                      <div className="text-lg font-semibold">
+                                        {idx}
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-3 whitespace-nowrap">
+                                    <div className="">
+                                      <div
+                                        className="text-lg font-semibold"
+                                        onClick={() => copyToClip(pro[0])}
+                                      >
+                                        {pro[0]}
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-3 whitespace-nowrap">
+                                    <div className="flex justify-center items-center align-middle w-full">
+                                      <div className="">
+                                        {pro[1] ? (
+                                          <CheckCircledIcon className="w-8 h-8 text-green-500" />
+                                        ) : (
+                                          <CrossCircledIcon className="w-8 h-8 text-red-500" />
+                                        )}
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                   <div className="flex flex-col gap-4 w-full">
                     <p className="text-lg font-semibold">Details: </p>
@@ -445,7 +464,7 @@ const User = () => {
                   <div className="flex flex-col gap-4 mt-4">
                     <Input
                       id={"remove-provider"}
-                      label={"Remove Provider:"}
+                      label={"Revoke Provider:"}
                       value={removeProvider || ""}
                       textSize={"large"}
                       placeholder={"add provider..."}
@@ -460,7 +479,7 @@ const User = () => {
                           );
                         }}
                       >
-                        Remove
+                        Revoke
                       </Button>
                     </div>
                   </div>

@@ -1,5 +1,4 @@
 const User = artifacts.require("User");
-const MedicalReport = artifacts.require("MedicalReport");
 const Provider = artifacts.require("Provider");
 
 module.exports = async function (deployer) {
@@ -7,3 +6,7 @@ module.exports = async function (deployer) {
   await deployer.deploy(User);
   await deployer.deploy(Provider);
 };
+
+// command:
+//  truffle dashboard
+//  truffle migrate --network dashboard

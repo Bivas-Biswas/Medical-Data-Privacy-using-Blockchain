@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConnectWalletButton from "../components/Misc/ConnectWallet";
 import { useLoginContext } from "../context";
 import { useRouter } from "next/router";
@@ -6,11 +6,24 @@ import Button from "../components/Misc/Button";
 import Link from "../components/Misc/Link";
 import toast from "react-hot-toast";
 
-function Login() {
+const Login = () => {
   const [correctNetwork, setCorrectNetwork] = useState(false);
   const { isUserLoggedIn, setIsUserLoggedIn, user, setUser } =
     useLoginContext();
   const router = useRouter();
+
+  useEffect(() => {
+    if (isUserLoggedIn) {
+      navigate("/dashboard");
+    }
+
+    if (!user.type) {
+      navigate("/");
+    }
+  }, []);
+  const navigate = (_route) => {
+    return router.push(_route);
+  };
 
   const connectWallet = async () => {
     try {
@@ -39,23 +52,33 @@ function Login() {
         type: user.type,
       });
       setIsUserLoggedIn(true);
-      router.push(`/dashboard`);
+      await router.push(`/dashboard`);
       toast.success("Logged in");
     } catch (error) {
       console.log("Error connecting to metamask", error);
     }
   };
 
+  if (isUserLoggedIn) {
+    return null;
+  }
+
+  if (!user.type) {
+    return null;
+  }
+
   return (
     <div className="flex flex-col justify-center py-6 items-center gap-10">
-      <p className="text-center text-3xl font-medium underline">Select logging method as a {user.type}</p>
+      <p className="text-center text-3xl font-medium underline">
+        Select logging method as a {user.type}
+      </p>
       {correctNetwork && <WrongNetworkMessage />}
       {!correctNetwork && !isUserLoggedIn && (
         <ConnectWalletButton connectWallet={connectWallet} />
       )}
     </div>
   );
-}
+};
 
 export default Login;
 

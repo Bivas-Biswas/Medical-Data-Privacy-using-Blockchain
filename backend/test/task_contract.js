@@ -1,4 +1,4 @@
-const MedicalReport = artifacts.require("MedicalReport");
+const MedicalReport = artifacts.require("MedReportMannageMent");
 
 contract("TaskContract", function () {
   it("should check tasks length is 1 after adding a task", async function () {
