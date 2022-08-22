@@ -9,7 +9,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain">
-    <img src="./public/favicon.jpg" alt="Logo" width="40%">
+    <img src="./public/favicon.jpg" alt="Logo" width="20%">
   </a>
     <h3 align="center">MeDiDataBlock</h3>
   <p align="center">
@@ -73,7 +73,7 @@ It divide into two types of users -
 - Store all reports.
 
 <p align="center">
-    <img src="readme/whole-system.png" alt="homepage">
+    <img src="readme/whole-system.png" alt="Whole system" width="60%">
     <p align="center">Whole system</p>
 </p>
 
@@ -82,28 +82,20 @@ It divide into two types of users -
 <table align="center">
     <tr>
         <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
                 <p align="center">
                     <img src="readme/home.png" alt="homepage">
                     <p align="center">Home</p>
                 </p>
-            </a>
         </td>
-        <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
-                <p align="center">
+        <td> <p align="center">
                     <img src="readme/login.png" alt="homepage">
                     <p align="center">Login</p>
                 </p>
-            </a>
         </td>
-        <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
-                <p align="center">
+        <td> <p align="center">
                     <img src="readme/wallet.png" alt="homepage">
                     <p align="center">Wallet</p>
                 </p>
-            </a>
         </td>
     </tr>
     </table>
@@ -111,20 +103,16 @@ It divide into two types of users -
     <table align="center">
     <tr>
         <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
                 <p align="center">
                     <img src="readme/user-dashboard.png" alt="table view">
                     <p align="center">Dashboard</p>
                 </p>
-            </a>
         </td>
         <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
                 <p align="center">
                     <img src="readme/user-details.png" alt="list view">
                     <p align="center">Details</p>
                 </p>
-            </a>
         </td>
     </tr>
 </table>
@@ -132,20 +120,16 @@ It divide into two types of users -
     <table align="center">
     <tr>
         <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
                 <p align="center">
                     <img src="readme/provider-dashboard.png" alt="table view">
                     <p align="center">Dashboard</p>
                 </p>
-            </a>
         </td>
         <td>
-            <a href="https://medical-data-privacy-using-blockchain.vercel.app/">
                 <p align="center">
                     <img src="readme/provider-details.png" alt="list view">
                     <p align="center">Details</p>
                 </p>
-            </a>
         </td>
     </tr>
 </table>
