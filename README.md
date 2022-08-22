@@ -167,7 +167,7 @@ It divide into two types of users -
 [issues-shield]: https://img.shields.io/github/issues/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain.svg?style=for-the-badge
 [issues-url]: https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain/issues
 [license-shield]: https://img.shields.io/github/license/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain.svg?style=for-the-badge
-[license-url]: hhttps://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain/blob/main/License.md
+[license-url]: https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain/blob/main/License.md
 [twitter-shield]: https://img.shields.io/badge/twitter-%231DA1F2.svg?style=for-the-badge&logo=Twitter&logoColor=white
 [twitter-url]: https://www.linkedin.com/in/bivas-biswas-828a731b7/
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
