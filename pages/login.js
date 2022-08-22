@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ConnectWalletButton from "../components/Misc/ConnectWallet";
 import { useLoginContext } from "../context";
 import { useRouter } from "next/router";
 import Button from "../components/Misc/Button";
 import Link from "../components/Misc/Link";
 import toast from "react-hot-toast";
+import { initialUser } from "../context/provider/Login";
 
 const Login = () => {
   const [correctNetwork, setCorrectNetwork] = useState(false);
@@ -12,18 +13,18 @@ const Login = () => {
     useLoginContext();
   const router = useRouter();
 
+  const navigate = useCallback(
+    (_route) => {
+      return router.push(_route);
+    },
+    [router]
+  );
+
   useEffect(() => {
-    if (isUserLoggedIn) {
+    if (user.address && user.type) {
       navigate("/dashboard");
     }
-
-    if (!user.type) {
-      navigate("/");
-    }
-  }, []);
-  const navigate = (_route) => {
-    return router.push(_route);
-  };
+  }, [navigate, user.address, user.type]);
 
   const connectWallet = async () => {
     try {
@@ -52,7 +53,7 @@ const Login = () => {
         type: user.type,
       });
       setIsUserLoggedIn(true);
-      await router.push(`/dashboard`);
+      await navigate(`/dashboard`);
       toast.success("Logged in");
     } catch (error) {
       console.log("Error connecting to metamask", error);
@@ -63,18 +64,41 @@ const Login = () => {
     return null;
   }
 
-  if (!user.type) {
-    return null;
-  }
-
   return (
     <div className="flex flex-col justify-center py-6 items-center gap-10">
-      <p className="text-center text-3xl font-medium underline">
-        Select logging method as a {user.type}
-      </p>
-      {correctNetwork && <WrongNetworkMessage />}
-      {!correctNetwork && !isUserLoggedIn && (
-        <ConnectWalletButton connectWallet={connectWallet} />
+      {!user.type ? (
+        <div>
+          <p className="text-3xl font-semibold text-center">Login as</p>
+          <div className="flex flex-row justify-center gap-4 items-center mt-8">
+            <Button
+              onClick={() => {
+                setUser({ ...user, type: "user" });
+              }}
+              className={"!bg-red-500 hover:scale-105 text-2xl px-12"}
+            >
+              User
+            </Button>
+            <Button
+              onClick={() => {
+                setUser({ ...user, type: "provider" });
+              }}
+              className={"!bg-yellow-500 hover:scale-105 text-2xl px-10"}
+            >
+              Provider
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center py-6 items-center gap-10">
+          <Button onClick={() => setUser(initialUser)} className="!py-1">Back</Button>
+          <p className="text-center text-3xl font-medium underline">
+            Select logging method as a {user.type}
+          </p>
+          {correctNetwork && <WrongNetworkMessage />}
+          {user.type && !correctNetwork && !isUserLoggedIn && (
+            <ConnectWalletButton connectWallet={connectWallet} />
+          )}
+        </div>
       )}
     </div>
   );

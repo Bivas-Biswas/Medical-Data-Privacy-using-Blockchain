@@ -5,7 +5,7 @@ function Footer() {
     <div className="text-center text-xl py-5 bg-blue-100">
       Created by{" "}
       <a
-        href="components/Layout/Footer"
+        href="https://bivasbiswas.super.site/"
         className="hover:underline font-medium hover:text-gray-900"
       >
         Bivas Bivas

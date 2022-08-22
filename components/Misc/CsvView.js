@@ -6,23 +6,15 @@ const CsvView = ({ csvInText, className = "" }) => {
 
   const headerKeys = Object.keys(Object.assign({}, ...array));
   return (
-    <div className="overflow-x-auto">
-      <table
-        className={cx(
-          "divide-y divide-gray-500 rounded flex flex-col max-h-[80vh] min-w-full w-max bg-gray-900 overflow-x-auto",
-          className
-        )}
-      >
-        <thead className={"rounded-t-xl"}>
-          <tr
-            key={"header"}
-            className="flex justify-evenly border border-blue-900"
-          >
+    <div className="overflow-x-auto w-full">
+      <table className={cx("divide-y divide-gray-700 text-center  w-full border-b border-gray-700", className)}>
+        <thead className={""}>
+          <tr key={"header"} className="font-bold border border-gray-700">
             {headerKeys.map((key, index) => (
               <th
                 key={index}
                 scope="col"
-                className="px-6 py-3 text-lg uppercase tracking-wider font-bold"
+                className="px-4 py-2"
               >
                 {key}
               </th>
@@ -30,15 +22,12 @@ const CsvView = ({ csvInText, className = "" }) => {
           </tr>
         </thead>
 
-        <tbody className="divide-y divide-gray-700 flex-1 rounded-b-xl">
+        <tbody className="divide-y divide-gray-700">
           {array.map((item, index) => (
-            <tr
-              key={index}
-              className="flex justify-evenly rounded-b-xl"
-            >
+            <tr key={index} className="">
               {Object.values(item).map((val, index) => (
-                <td className="px-6 py-3 whitespace-nowrap" key={index}>
-                  {val}
+                <td className="px-3 py-1" key={index}>
+                  {val ? val : "-"}
                 </td>
               ))}
             </tr>

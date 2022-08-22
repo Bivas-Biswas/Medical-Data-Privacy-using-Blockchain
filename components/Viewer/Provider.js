@@ -149,7 +149,8 @@ function Provider() {
   return (
     <div>
       <p className="text-center my-4 text-xl">
-        Hello Welcome back <br /> <b>{user.address}</b>
+        Welcome back <br />{" "}
+        <b onClick={() => copyToClip(user.address)}>{user.address}</b>
       </p>
       <div className="flex flex-col gap-3">
         {report && (
@@ -278,7 +279,7 @@ function Provider() {
                         <div className="flex justify-center items-center align-middle w-fulls">
                           <div
                             className="text-lg text-content-medium font-semibold"
-                            onClick={() => copyToClip(report[1])}
+                            onClick={() => copyToClip(report[0])}
                           >
                             {report[0]}
                           </div>
