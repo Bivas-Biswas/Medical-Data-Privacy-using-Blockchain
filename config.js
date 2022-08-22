@@ -1,2 +1,2 @@
-export const UserContractAddress = '0xEB2E58Ba9ded43a2a9CdB6c3d001C9DB118bcA3E'
-export const ProviderContractAddress = '0xABbbC090De5600bfd1674cE070323F29892FA818'
+export const UserContractAddress = process.env.NEXT_PUBLIC_USER_CONTRACT
+export const ProviderContractAddress = process.env.NEXT_PUBLIC_PROVIDER_CONTRACT
