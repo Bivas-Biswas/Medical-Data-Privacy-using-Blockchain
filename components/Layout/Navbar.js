@@ -14,7 +14,7 @@ function Navbar() {
     <nav className="sticky top-0 bg-blue-200 py-4 px-2 shadow-lg mb-10">
       <div className="flex flex-row items-center justify-between w-full max-w-6xl mx-auto">
         <Link
-          href={user.address && user.type ? "/dashboard" : "/"}
+          href={user.type ? "" : "/"}
           className="flex flex-row gap-2 items-center justify-between"
         >
           <Image src="/favicon.jpg" alt="logo" width={40} height={40} />

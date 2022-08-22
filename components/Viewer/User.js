@@ -121,8 +121,7 @@ const revokeProvider = async (id, account) => {
 
 const sampleCSV = `first_name,last_name,email,gender,age,zip,registered
 Constantin,Langsdon,clangsdon0@hc360.com,Male,96,123,true
-Norah,Raison,nraison1@wired.com,Female,32,false
-`;
+Norah,Raison,nraison1@wired.com,Female,32,false`;
 
 const User = () => {
   const fileReader = new FileReader();
@@ -134,6 +133,8 @@ const User = () => {
   const [allReport, setAllReport] = useState([]);
   const [selectReport, setSelectReport] = useState(null);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [showRemoveBtn, setShowRemoveBtn] = useState(false);
+
   const { getRootProps, getInputProps, isDragAccept, isDragReject } =
     useDropzone({
       maxFiles: 1,
@@ -151,6 +152,7 @@ const User = () => {
             };
             setFile(file);
             fileReader.readAsText(file);
+            setShowRemoveBtn(true);
           });
         }
       },
@@ -182,7 +184,8 @@ const User = () => {
   return (
     <div className={"flex flex-col gap-4"}>
       <p className="text-center my-4 text-xl">
-        Hello Welcome back <br /> <b>{user.address}</b>
+        Welcome back <br />{" "}
+        <b onClick={() => copyToClip(user.address)}>{user.address}</b>
       </p>
       {isUserLoggedIn && user.type === "user" && (
         <Button className="w-max" onClick={handleDownloadSampleFile}>
@@ -227,19 +230,34 @@ const User = () => {
               )}
             </div>
           </div>
-          <Button
-            onClick={async () => {
-              if (!report || !file) {
-                return toast.error("No reported add!");
-              }
-              await addReport(json_to_b64(report));
-              setReport(null);
-              setFile(null);
-            }}
-            className="bg-yellow-500 px-10 text-xl w-min"
-          >
-            Save
-          </Button>
+          <div className="flex flex-row gap-4 items-center">
+            {showRemoveBtn && (
+              <Button
+                onClick={() => {
+                  setReport(null);
+                  setFile(null);
+                  setShowRemoveBtn(false);
+                }}
+                className="bg-violet-500 px-3 text-xl w-min"
+              >
+                Remove
+              </Button>
+            )}
+
+            <Button
+              onClick={async () => {
+                if (!report || !file) {
+                  return toast.error("No reported add!");
+                }
+                await addReport(json_to_b64(report));
+                setReport(null);
+                setFile(null);
+              }}
+              className="bg-yellow-500 px-10 text-xl w-min"
+            >
+              Save
+            </Button>
+          </div>
         </div>
         <div className={"flex flex-col gap-4 w-full"}>
           <div>

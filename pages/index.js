@@ -5,35 +5,36 @@ import { useEffect } from "react";
 
 export default function Home() {
   const router = useRouter();
-  const { user, setUser } = useLoginContext();
+  const { user } = useLoginContext();
 
   useEffect(() => {
-    if (user.address && user.type) {
-      router.push("/dashboard");
+    if (user.type) {
+      router.push("/login");
     }
   }, []);
 
+  if (user.type) {
+    return null;
+  }
+
   return (
-    <div className="flex flex-col mt-32 items-center gap-10">
-      <p className="text-3xl font-semibold">Login as a</p>
+    <div className="flex flex-col mt-24 items-center gap-10">
+      <div>
+        <p className="animate-charcter text-center text-3xl font-semibold">
+          One stop solution of your precious <br /> Medical Data.
+        </p>
+        <p className="text-center mt-5 text-lg">
+          Access and Data Privacy using Blockchain
+        </p>
+      </div>
       <div className="flex flex-row justify-center gap-4 items-center">
         <Button
           onClick={() => {
             router.push("/login");
-            setUser({ ...user, type: "user" });
           }}
-          className={"!bg-red-500 hover:scale-105 text-2xl px-12"}
+          className={"!bg-violet-600 hover:scale-105 text-2xl px-12"}
         >
-          User
-        </Button>
-        <Button
-          onClick={() => {
-            router.push("/login");
-            setUser({ ...user, type: "provider" });
-          }}
-          className={"!bg-yellow-500 hover:scale-105 text-2xl px-10"}
-        >
-          Provider
+          Login
         </Button>
       </div>
     </div>
