@@ -79,18 +79,6 @@ It divide into two types of users -
 
 ## 📸 Showcase
 
-#### Video
-
-<!-- blank line -->
-<figure class="video_container">
-  <video controls="true" allowfullscreen="true" poster="readme/showcase-video.mp4">
-    <source src="readme/showcase-video.mp4" type="video/mp4">
-  </video>
-</figure>
-<!-- blank line -->
-
-#### Image
-
 <table align="center">
     <tr>
         <td>
