@@ -119,9 +119,8 @@ const revokeProvider = async (id, account) => {
   }
 };
 
-const sampleCSV = `first_name,last_name,email,gender,age,zip,registered
-Constantin,Langsdon,clangsdon0@hc360.com,Male,96,123,true
-Norah,Raison,nraison1@wired.com,Female,32,false`;
+const sampleCSV = `Check the conditions that apply to you or to any members of your immediate relatives,Check the symptoms that you're currently experiencing,Are you currently taking any medication?,Do you have any medication allergies?,Do you use or do you have history of using tobacco?,Do you use or do you have history of using illegal drugs?,How often do you consume alcohol?
+Cardiac disease,Chest pain,No,Not Sure,No,No,Never`;
 
 const User = () => {
   const fileReader = new FileReader();
