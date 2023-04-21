@@ -13,7 +13,6 @@
   </a>
     <h3 align="center">MeDiDataBlock</h3>
   <p align="center">
-  A Task Managing App, Track your work with time.
     <br />
     <a href="https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain/#kajmanage"><strong>Explore the docs »</strong></a>
     <br />
