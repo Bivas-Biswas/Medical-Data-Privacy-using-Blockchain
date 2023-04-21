@@ -13,6 +13,7 @@
   </a>
     <h3 align="center">MeDiDataBlock</h3>
   <p align="center">
+  A cutting-edge blockchain platform that empowers patients to securely upload and manage their medical reports, while retaining full control over access permissions. With no need for third-party involvement.
     <br />
     <a href="https://github.com/Bivas-Biswas/Medical-Data-Privacy-using-Blockchain/#kajmanage"><strong>Explore the docs »</strong></a>
     <br />
